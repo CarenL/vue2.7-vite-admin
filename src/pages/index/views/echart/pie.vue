@@ -4,7 +4,7 @@
 
 <script>
 import * as echarts from 'echarts/core';
-import { BarChart } from 'echarts/charts';
+import { PieChart } from 'echarts/charts';
 
 import {
   TitleComponent,
@@ -13,6 +13,7 @@ import {
   DatasetComponent,
   LegendComponent,
   TransformComponent,
+  ToolboxComponent,
 } from 'echarts/components';
 
 import { LabelLayout, UniversalTransition } from 'echarts/features';
@@ -25,7 +26,8 @@ echarts.use([
   DatasetComponent,
   TransformComponent,
   LegendComponent,
-  BarChart,
+  ToolboxComponent,
+  PieChart,
   LabelLayout,
   UniversalTransition,
   CanvasRenderer,
@@ -37,40 +39,38 @@ export default {
     let id = ref();
     let chart = '';
     let option = reactive({
-      title: {
-        text: 'World Population',
+      legend: {
+        top: 'bottom',
       },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow',
+      toolbox: {
+        show: true,
+        feature: {
+          mark: { show: true },
+          dataView: { show: true, readOnly: false },
+          restore: { show: true },
+          saveAsImage: { show: true },
         },
-      },
-      legend: {},
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-      },
-      xAxis: {
-        type: 'value',
-        boundaryGap: [0, 0.01],
-      },
-      yAxis: {
-        type: 'category',
-        data: ['Brazil', 'Indonesia', 'USA', 'India', 'China', 'World'],
       },
       series: [
         {
-          name: '2011',
-          type: 'bar',
-          data: [18203, 23489, 29034, 104970, 131744, 630230],
-        },
-        {
-          name: '2012',
-          type: 'bar',
-          data: [19325, 23438, 31000, 121594, 134141, 681807],
+          name: 'Nightingale Chart',
+          type: 'pie',
+          radius: [50, 250],
+          center: ['50%', '50%'],
+          roseType: 'area',
+          itemStyle: {
+            borderRadius: 8,
+          },
+          data: [
+            { value: 40, name: 'rose 1' },
+            { value: 38, name: 'rose 2' },
+            { value: 32, name: 'rose 3' },
+            { value: 30, name: 'rose 4' },
+            { value: 28, name: 'rose 5' },
+            { value: 26, name: 'rose 6' },
+            { value: 22, name: 'rose 7' },
+            { value: 18, name: 'rose 8' },
+          ],
         },
       ],
     });

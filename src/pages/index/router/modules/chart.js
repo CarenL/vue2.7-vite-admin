@@ -17,6 +17,15 @@ export default [
           icon: 'el-icon-s-data',
         },
       },
+      {
+        path: 'pie',
+        name: 'Pie',
+        component: () => import('@index/views/echart/pie.vue'),
+        meta: {
+          title: '饼状图',
+          icon: 'el-icon-s-help',
+        },
+      },
     ],
   },
 ];
