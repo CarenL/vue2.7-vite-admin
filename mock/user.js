@@ -91,11 +91,11 @@ export default [
 
   // user logout
   {
-    url: `/sys/user/logout`,
+    url: `/sys/logout`,
     method: 'post',
     response: (_) => {
       return {
-        code: 20000,
+        code: 200,
         data: 'success',
       };
     },

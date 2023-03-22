@@ -8,28 +8,25 @@ import chart from './modules/chart';
 
 Vue.use(VueRouter);
 
-const routes = [...user, ...home, ...form, ...chart];
+const constantroutes = [...user, ...home, ...form, ...chart];
 
-const router = new VueRouter({
-  // mode: 'history',
-  // base: import.meta.env.BASE_URL,
-  routes,
-  scrollBehavior() {
-    return {
-      x: 0,
-      y: 0,
-    };
-  },
-});
+const createRouter = () =>
+  new VueRouter({
+    // mode: "hash", // require service support
+    routes: constantroutes,
+    scrollBehavior() {
+      return {
+        x: 0,
+        y: 0,
+      };
+    },
+  });
+
+const router = createRouter();
 
 export function resetRouter() {
-  const WHITE_NAME_LIST = ['Login'];
-  router.getRoutes().forEach((route) => {
-    const { name } = route;
-    if (name && !WHITE_NAME_LIST.includes(name)) {
-      router.hasRoute(name) && router.removeRoute(name);
-    }
-  });
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher; // reset router
 }
 
 export default router;
