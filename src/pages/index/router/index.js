@@ -6,6 +6,13 @@ import home from './modules/home';
 import form from './modules/form';
 import chart from './modules/chart';
 
+//3.1以上版本返回Promise需要兼容
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location, resolve, reject) {
+  if (resolve || reject) return originalPush.call(this, location, resolve, reject);
+  return originalPush.call(this, location).catch((e) => {});
+};
+
 Vue.use(VueRouter);
 
 const constantroutes = [...user, ...home, ...form, ...chart];

@@ -5,30 +5,34 @@ import user from './modules/user';
 import home from './modules/home';
 import form from './modules/form';
 
+//3.1以上版本返回Promise需要兼容
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location, resolve, reject) {
+  if (resolve || reject) return originalPush.call(this, location, resolve, reject);
+  return originalPush.call(this, location).catch((e) => {});
+};
+
 Vue.use(VueRouter);
 
-const routes = [...user, ...home, ...form];
+const constantroutes = [...user, ...home, ...form];
 
-const router = new VueRouter({
-  // mode: 'history',
-  // base: import.meta.env.BASE_URL,
-  routes,
-  scrollBehavior() {
-    return {
-      x: 0,
-      y: 0,
-    };
-  },
-});
+const createRouter = () =>
+  new VueRouter({
+    // mode: "hash", // require service support
+    routes: constantroutes,
+    scrollBehavior() {
+      return {
+        x: 0,
+        y: 0,
+      };
+    },
+  });
+
+const router = createRouter();
 
 export function resetRouter() {
-  const WHITE_NAME_LIST = ['Login'];
-  router.getRoutes().forEach((route) => {
-    const { name } = route;
-    if (name && !WHITE_NAME_LIST.includes(name)) {
-      router.hasRoute(name) && router.removeRoute(name);
-    }
-  });
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher; // reset router
 }
 
 export default router;
