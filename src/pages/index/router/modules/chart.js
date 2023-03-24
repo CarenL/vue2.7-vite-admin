@@ -5,7 +5,7 @@ export default [
     component: Layout,
     meta: {
       title: '图表',
-      icon: 'el-icon-data-line',
+      icon: 'bar-chart',
     },
     children: [
       {
@@ -14,7 +14,7 @@ export default [
         component: () => import('@index/views/echart/bar.vue'),
         meta: {
           title: '柱状图',
-          icon: 'el-icon-s-data',
+          icon: 'bar-chart',
         },
       },
       {
@@ -23,7 +23,7 @@ export default [
         component: () => import('@index/views/echart/pie.vue'),
         meta: {
           title: '饼状图',
-          icon: 'el-icon-s-help',
+          icon: 'pie-chart',
         },
       },
     ],

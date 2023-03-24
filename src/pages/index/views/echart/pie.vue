@@ -1,5 +1,7 @@
 <template>
-  <div :id="id" class="chart-bar"></div>
+  <a-layout-content>
+    <div :id="id" class="chart-bar"></div>
+  </a-layout-content>
 </template>
 
 <script>

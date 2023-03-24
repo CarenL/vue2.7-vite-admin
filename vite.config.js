@@ -61,7 +61,6 @@ export default ({ mode }) => {
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
-        '@childone': fileURLToPath(new URL('./src/pages/childone', import.meta.url)),
         '@index': fileURLToPath(new URL('./src/pages/index', import.meta.url)),
         path: 'path-browserify',
       },
@@ -84,7 +83,6 @@ export default ({ mode }) => {
         input: {
           // 配置所有页面路径，使得所有页面都会被打包
           main: resolve(__dirname, 'index.html'),
-          pageone: resolve(__dirname, 'childone.html'),
         },
         output: {
           chunkFileNames: 'src/js/[name]-[hash].js',
@@ -112,6 +110,13 @@ export default ({ mode }) => {
     },
     css: {
       preprocessorOptions: {
+        less: {
+          modifyVars: {
+            'primary-color': '#18b1b1',
+            'link-color': '#18b1b1',
+          },
+          javascriptEnabled: true,
+        },
         scss: {
           modifyVars: {
             hack: `'true; @import (reference) "${resolve('src/style/variables.module.scss')}";`,

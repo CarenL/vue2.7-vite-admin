@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { MessageBox, Message } from 'element-ui';
+import Message from 'ant-design-vue/lib/message';
+import Modal from 'ant-design-vue/lib/modal';
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
@@ -34,7 +35,7 @@ instance.interceptors.response.use(
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
         // to re-login
-        MessageBox.confirm(
+        Modal.confirm(
           'You have been logged out, you can cancel to stay on this page, or log in again',
           'Confirm logout',
           {

@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: "AppMain",
+  name: 'AppMain',
   computed: {
     key() {
       return this.$route.path;
@@ -17,13 +17,19 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="less">
 .app-main {
   /*50 = navbar  */
   min-height: calc(100vh - 50px);
   width: 100%;
   position: relative;
   overflow: hidden;
+
+  > .ant-layout-content {
+    margin: 24px 16px;
+    padding: 24px;
+    background: #fff;
+  }
 
   .el-table {
     background: #f3f3f3;
@@ -46,7 +52,7 @@ export default {
 }
 </style>
 
-<style lang="scss">
+<style lang="less">
 // fix css style bug in open el-dialog
 .el-popup-parent--hidden {
   .fixed-header {

@@ -1,7 +1,7 @@
 <template>
-  <el-main
-    ><el-button type="primary">表单2</el-button>
-    <div :class="$style.test">css变量绑定</div></el-main
+  <a-layout-content
+    ><a-button type="primary">表单2</a-button>
+    <div :class="$style.test">css变量绑定</div></a-layout-content
   >
 </template>
 

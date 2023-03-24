@@ -1,5 +1,5 @@
 <template>
-  <el-container
+  <a-layout
     class="login-container"
     :style="{
       background: 'url(' + require('@/assets/bg.png') + ') center center no-repeat',
@@ -19,7 +19,7 @@
       </div>
       <router-view />
     </div>
-  </el-container>
+  </a-layout>
 </template>
 
 <script setup>
@@ -135,40 +135,50 @@ $default: #ccc;
     }
   }
 
-  .el-input {
+  .ant-input {
     display: inline-block;
     height: 47px;
-    width: 85%;
+    width: 100%;
+    background: transparent;
+    border: none;
+    -webkit-appearance: none;
+    border-radius: 5px;
+    padding: 12px 5px 12px 15px;
+    color: $black;
+    height: 47px;
+    // caret-color: $cursor;
 
-    input {
-      background: transparent;
+    &:focus {
       border: none;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $black;
-      height: 47px;
-      // caret-color: $cursor;
-
-      &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $light_gray inset !important;
-        -webkit-text-fill-color: $cursor !important;
-      }
+      box-shadow: none;
     }
 
-    input:-moz-placeholder {
+    &:-webkit-autofill {
+      box-shadow: 0 0 0px 1000px $light_gray inset !important;
+      -webkit-text-fill-color: $cursor !important;
+    }
+
+    &:-moz-placeholder {
       color: rgba($color: $default, $alpha: 0.6);
     }
-    input:-ms-input-placeholder {
+    &:-ms-input-placeholder {
       color: rgba($color: $default, $alpha: 0.6);
     }
-    input::-webkit-input-placeholder {
+    &::-webkit-input-placeholder {
       color: rgba($color: $default, $alpha: 0.6);
     }
   }
 
-  .el-form-item {
+  .ant-input-affix-wrapper .ant-input:not(:first-child) {
+    padding-left: 45px;
+  }
+
+  .ant-input-affix-wrapper,
+  .non-full-form {
     border: 1px solid #ccc;
+  }
+
+  .ant-form-item {
     background-color: $light_gray;
     border-radius: 5px;
     color: #454545;

@@ -3,74 +3,83 @@
     <p class="title-wrapper">
       <span class="form-title">登录</span>
     </p>
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" auto-complete="on" label-position="left">
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model.trim="loginForm.username"
+    <a-form :form="form" auto-complete="on" label-position="left">
+      <a-form-item prop="username">
+        <a-input
           placeholder="用户名"
           name="username"
           type="text"
           tabindex="1"
           auto-complete="on"
-        />
-      </el-form-item>
+          v-decorator="['username', { rules: loginRules.username }]"
+        >
+          >
+          <template #prefix>
+            <span class="svg-container">
+              <svg-icon icon-class="user" />
+            </span>
+          </template>
+        </a-input>
+      </a-form-item>
 
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
+      <a-form-item prop="password">
+        <a-input
           :key="passwordType"
           ref="password"
-          v-model.trim="loginForm.password"
           :type="passwordType"
           placeholder="密码"
           name="password"
           tabindex="2"
           auto-complete="on"
           @keyup.enter.native="handlerLogin"
-        />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
-      </el-form-item>
-      <el-form-item prop="captcha">
-        <el-row>
-          <el-col :span="16">
-            <el-input
+          v-decorator="['password', { rules: loginRules.password }]"
+        >
+          <template #prefix>
+            <span class="svg-container">
+              <svg-icon icon-class="password" />
+            </span>
+          </template>
+          <template #suffix>
+            <span class="show-pwd" @click="showPwd">
+              <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+            </span>
+          </template>
+        </a-input>
+      </a-form-item>
+      <a-form-item prop="captcha">
+        <a-row class="non-full-form">
+          <a-col :span="16">
+            <a-input
               ref="captcha"
-              v-model.trim="loginForm.captcha"
               placeholder="验证码"
               name="captcha"
               type="text"
               tabindex="3"
               auto-complete="off"
+              v-decorator="['captcha', { rules: loginRules.captcha }]"
             />
-          </el-col>
-          <el-col :span="8" class="captcha-img">
+          </a-col>
+          <a-col :span="8" class="captcha-img">
             <img :src="captchaUrl" alt="" @click="getCaptcha" />
-          </el-col>
-        </el-row>
-      </el-form-item>
+          </a-col>
+        </a-row>
+      </a-form-item>
 
-      <el-form-item prop="remember" class="tips">
+      <a-form-item prop="remember" class="tips">
         <div class="left">
-          <el-checkbox v-model="loginForm.remember">自动登录</el-checkbox>
+          <a-checkbox v-model="remember">自动登录</a-checkbox>
         </div>
-      </el-form-item>
+      </a-form-item>
 
-      <el-button
+      <a-button
         :loading="loading"
         type="primary"
+        size="large"
         style="width: 100%; margin-bottom: 30px"
         @click.native.prevent="handlerLogin"
-        >登录</el-button
+        >登录</a-button
       >
-    </el-form>
+    </a-form>
   </div>
 </template>
 
@@ -81,15 +90,6 @@ import IMAGE from '@/assets/checkcode.png';
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
-      if (regex.test(value)) {
-        this.loginType = 0;
-      } else {
-        this.loginType = 1;
-      }
-      callback();
-    };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
         callback(new Error('密码不能少于6位'));
@@ -97,25 +97,13 @@ export default {
         callback();
       }
     };
-    const validateCaptcha = (rule, value, callback) => {
-      if (!value.length) {
-        callback(new Error('请输入验证码'));
-      } else {
-        callback();
-      }
-    };
     return {
-      loginForm: {
-        username: '',
-        password: '',
-        captcha: '',
-        remember: true,
-      },
+      remember: true,
       loginType: 1,
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-        captcha: [{ required: true, trigger: 'blur', validator: validateCaptcha }],
+        username: [{ required: true, message: '用户名不能为空' }],
+        password: [{ required: true, message: '密码不能为空' }],
+        captcha: [{ required: true, message: '验证码不能为空' }],
       },
       loading: false,
       passwordType: 'password',
@@ -134,6 +122,9 @@ export default {
   },
   created() {
     this.getCaptcha();
+  },
+  beforeCreate() {
+    this.form = this.$form.createForm(this, { name: 'login' });
   },
   methods: {
     showPwd() {
@@ -162,15 +153,15 @@ export default {
         });
     },
     handlerLogin() {
-      this.$refs.loginForm.validate((valid) => {
-        if (valid) {
+      this.form.validateFields((err, values) => {
+        if (!err) {
           this.loading = true;
           this.$store
             .dispatch('user/login', {
-              captcha: this.loginForm.captcha,
+              captcha: values.captcha,
               checkKey: this.captchaKey,
-              username: this.loginForm.username,
-              password: this.loginForm.password,
+              username: values.username,
+              password: values.password,
             })
             .then(() => {
               this.getCaptcha();
@@ -220,25 +211,11 @@ $light_gray: #eee;
       }
     }
   }
-
   .svg-container {
-    display: inline-block;
-    width: 30px;
-    // padding: 6px 5px 6px 15px;
-    padding: 0 5px 0 15px;
-    line-height: 47px;
-    color: $dark_gray;
-    vertical-align: middle;
+    color: #889aa4;
   }
-
   .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
-    color: $dark_gray;
     cursor: pointer;
-    user-select: none;
   }
 }
 </style>

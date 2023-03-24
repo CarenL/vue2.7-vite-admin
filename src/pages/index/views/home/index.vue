@@ -1,5 +1,5 @@
 <template>
-  <el-main>主页</el-main>
+  <a-layout-content> Content </a-layout-content>
 </template>
 
 <script>

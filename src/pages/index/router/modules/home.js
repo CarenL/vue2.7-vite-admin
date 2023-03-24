@@ -6,7 +6,7 @@ export default [
     redirect: '/home',
     meta: {
       title: '主页',
-      icon: 'nested',
+      icon: 'appstore',
     },
     children: [
       {
@@ -15,7 +15,7 @@ export default [
         component: () => import('@index/views/home/index.vue'),
         meta: {
           title: '主页',
-          icon: 'nested',
+          icon: 'appstore',
         },
       },
     ],

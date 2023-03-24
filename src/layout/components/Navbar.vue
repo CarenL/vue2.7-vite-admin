@@ -5,21 +5,21 @@
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
-      <el-dropdown class="avatar-container" trigger="click">
-        <div class="avatar-wrapper">
+      <a-dropdown class="avatar-container" :trigger="['click']">
+        <div class="avatar-wrapper" @click="(e) => e.preventDefault()">
           <!-- <img
             src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"
             class="user-avatar"
           /> -->
           <span class="username">{{ name }}</span>
-          <i class="el-icon-caret-bottom" />
+          <a-icon type="down" />
         </div>
-        <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <el-dropdown-item @click.native="logout">
+        <a-menu slot="overlay" class="user-dropdown">
+          <a-menu-item @click.native="logout">
             <span style="display: block">退出</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+          </a-menu-item>
+        </a-menu>
+      </a-dropdown>
     </div>
   </div>
 </template>
@@ -49,7 +49,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .navbar {
   height: 50px;
   overflow: hidden;
@@ -103,31 +103,28 @@ export default {
 
     .avatar-container {
       margin-right: 30px;
+      margin-top: 5px;
+      position: relative;
 
-      .avatar-wrapper {
-        margin-top: 5px;
-        position: relative;
+      .user-avatar {
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+      }
+      .username {
+        display: inline-block;
+        line-height: 40px;
+        cursor: pointer;
+      }
 
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
-        .username {
-          display: inline-block;
-          line-height: 40px;
-          cursor: pointer;
-        }
-
-        .el-icon-caret-bottom {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 0px;
-          font-size: 12px;
-          line-height: 40px;
-        }
+      .anticon-down {
+        cursor: pointer;
+        position: absolute;
+        right: -20px;
+        top: 0px;
+        font-size: 12px;
+        line-height: 40px;
       }
     }
   }

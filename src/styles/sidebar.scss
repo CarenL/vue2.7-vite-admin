@@ -27,18 +27,22 @@
 
     .scrollbar-wrapper {
       overflow-x: hidden !important;
+      overflow: scroll;
+      height: 100%;
+      margin-bottom: -17px;
+      margin-right: -17px;
     }
 
     .el-scrollbar__bar.is-vertical {
       right: 0px;
     }
 
-    .el-scrollbar {
+    .admin-scrollbar {
       height: 100%;
     }
 
     &.has-logo {
-      .el-scrollbar {
+      .admin-scrollbar {
         height: calc(100% - 50px);
       }
     }

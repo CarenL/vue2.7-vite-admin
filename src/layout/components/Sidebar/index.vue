@@ -1,34 +1,40 @@
 <template>
   <div :class="{ 'has-logo': showLogo }">
     <logo v-if="showLogo" :collapse="isCollapse" />
-    <el-scrollbar wrap-class="scrollbar-wrapper">
-      <el-menu
-        :default-active="activeMenu"
-        :collapse="isCollapse"
-        :background-color="variables.menuBg"
-        :text-color="variables.menuText"
-        :unique-opened="false"
-        :active-text-color="variables.menuActiveText"
-        :collapse-transition="false"
-        mode="vertical"
-      >
-        <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
-      </el-menu>
-    </el-scrollbar>
+    <div class="admin-scrollbar">
+      <div class="scrollbar-wrapper">
+        <!-- <a-menu :default-selected-keys="activeMenu" mode="inline" theme="dark" :inline-collapsed="isCollapse">
+          <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
+        </a-menu> -->
+        <my-menu
+          :default-selected-keys="activeMenu"
+          :menu="routes"
+          theme="dark"
+          mode="inline"
+          :collapsed="isCollapse"
+        ></my-menu>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import Logo from './Logo.vue';
-import SidebarItem from './SidebarItem.vue';
+// import SidebarItem from './SidebarItem.vue';
+import MyMenu from './MyMenu.vue';
 import variables from '@/styles/variables.module.scss';
 
 export default {
-  components: { SidebarItem, Logo },
+  components: {
+    // SidebarItem,
+    Logo,
+    MyMenu,
+  },
   computed: {
     ...mapGetters(['sidebar']),
     routes() {
+      // return this.seriateRoutes(this.$router.options.routes);
       return this.$router.options.routes;
     },
     activeMenu() {
@@ -36,9 +42,9 @@ export default {
       const { meta, path } = route;
       // if set path, the sidebar will highlight the path you set
       if (meta.activeMenu) {
-        return meta.activeMenu;
+        return [meta.activeMenu];
       }
-      return path;
+      return [path];
     },
     showLogo() {
       return this.$store.state.settings.sidebarLogo;
@@ -48,6 +54,38 @@ export default {
     },
     isCollapse() {
       return !this.sidebar.opened;
+    },
+  },
+  methods: {
+    //系列化路由
+    seriateRoutes(route) {
+      const filterMenu = (menuList) => {
+        console.log(menuList);
+        return menuList
+          .filter((item) => {
+            return !item.hidden;
+          })
+          .map((item) => {
+            item = Object.assign({}, item);
+            if (item.children) {
+              let onlyOneChild = '';
+              let showRoute = item.children.filter((item) => {
+                onlyOneChild = item;
+                return !item.hidden;
+              });
+              if (showRoute.length === 1) {
+                item = Object.assign({}, onlyOneChild);
+              }
+            }
+            if (item.children) {
+              item.children = filterMenu(item.children);
+            }
+            return item;
+          });
+      };
+      let menuList = filterMenu(route);
+      console.log('menuList', menuList);
+      return menuList;
     },
   },
 };

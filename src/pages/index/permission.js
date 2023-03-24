@@ -1,6 +1,6 @@
 import router from './router/index';
 import store from './store/index';
-import { Message } from 'element-ui';
+import Message from 'ant-design-vue/lib/message';
 import NProgress from 'nprogress'; // progress bar
 import 'nprogress/nprogress.css'; // progress bar style
 import { getToken } from '@/utils/auth'; // get token from cookie
