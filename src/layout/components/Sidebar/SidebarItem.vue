@@ -18,14 +18,14 @@
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
-      <!-- <sidebar-item
+      <sidebar-item
         v-for="child in item.children"
         :key="child.path"
         :is-nest="true"
         :item="child"
         :base-path="resolvePath(child.path)"
         class="nest-menu"
-      /> -->
+      />
     </a-sub-menu>
   </div>
 </template>
@@ -63,6 +63,36 @@ export default {
     return {};
   },
   methods: {
+    //系列化路由
+    seriateRoutes(route) {
+      const filterMenu = (menuList) => {
+        console.log(menuList);
+        return menuList
+          .filter((item) => {
+            return !item.hidden;
+          })
+          .map((item) => {
+            item = Object.assign({}, item);
+            if (item.children) {
+              let onlyOneChild = '';
+              let showRoute = item.children.filter((item) => {
+                onlyOneChild = item;
+                return !item.hidden;
+              });
+              if (showRoute.length === 1) {
+                item = Object.assign({}, onlyOneChild);
+              }
+            }
+            if (item.children) {
+              item.children = filterMenu(item.children);
+            }
+            return item;
+          });
+      };
+      let menuList = filterMenu(route);
+      console.log('menuList', menuList);
+      return menuList;
+    },
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter((item) => {
         if (item.hidden) {
